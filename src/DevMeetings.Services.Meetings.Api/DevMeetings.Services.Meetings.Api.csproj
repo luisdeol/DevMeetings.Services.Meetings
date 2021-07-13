@@ -8,4 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DevMeetings.Services.Meetings.Application\DevMeetings.Services.Meetings.Application.csproj" />
+    <ProjectReference Include="..\DevMeetings.Services.Meetings.Core\DevMeetings.Services.Meetings.Core.csproj" />
+    <ProjectReference Include="..\DevMeetings.Services.Meetings.Infrastructure\DevMeetings.Services.Meetings.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
