@@ -1,10 +1,18 @@
 using System;
 using System.Text;
+using DevMeetings.Services.Meetings.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DevMeetings.Services.Meetings.Application
 {
     public static class Extensions
     {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services) {
+            services.AddScoped<IMeetingService, MeetingService>();
+
+            return services;
+        }
+
         public static string ToDashCase(this string text)
         {
             if(text == null) {

@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using DevMeetings.Services.Meetings.Application.Dtos.InputModels;
+using DevMeetings.Services.Meetings.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevMeetings.Services.Meetings.Api.Controllers
@@ -8,23 +10,40 @@ namespace DevMeetings.Services.Meetings.Api.Controllers
     [ApiController]
     public class MeetingsController : ControllerBase
     {
+        private readonly IMeetingService _meetingService;
+        public MeetingsController(IMeetingService meetingService)
+        {
+            _meetingService = meetingService;
+        }
+
         [HttpGet]
-        public async Task<IActionResult> Get(string category) {
-            return Ok();
+        public async Task<IActionResult> Get() {
+            var result = await _meetingService.GetAll();
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id) {
-            return Ok();
+            var result = await _meetingService.GetById(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post() {
-            return CreatedAtAction(nameof(GetById), new { id = Guid.NewGuid()}, null);
+        public async Task<IActionResult> Post([FromBody] CreateMeetingInputModel inputModel) {
+            var id = await _meetingService.Create(inputModel);
+
+            return CreatedAtAction(nameof(GetById), new { id = id }, inputModel);
         }
 
         [HttpPost("{id}/participants")]
-        public async Task<IActionResult> PostParticipant() {
+        public async Task<IActionResult> PostParticipant([FromBody] RegisterParticipantInputModel inputModel) {
+            await _meetingService.RegisterParticipant(inputModel);
+
             return NoContent();
         }
     }
